@@ -81,7 +81,8 @@ class imp_res : public Restaurant
 		}
 
 
-		void logicRED(customer* cus) {
+		void logicRED(customer* abc) {
+			customer *cus=new customer(abc->name, abc->energy,NULL,NULL);
             if (cus->energy ==  0){
 				return;
 			}
@@ -190,14 +191,14 @@ class imp_res : public Restaurant
 				counter=0;
 				first->next=NULL;
 				first->prev=NULL;				
-				customer *const head=dau;
-				customer *a=head;
-				cout<<"head"<<endl;
-				for (int i=0; i < counterdau ; i++){
-					cout<<a->energy<<"     ";
-					a=a->next;
-				}
-				cout<<endl;
+				// customer *const head=dau;
+				// customer *a=head;
+				// cout<<"head"<<endl;
+				// for (int i=0; i < counterdau ; i++){
+				// 	cout<<a->energy<<"     ";
+				// 	a=a->next;
+				// }
+				// cout<<endl;
 
 
 
@@ -209,15 +210,15 @@ class imp_res : public Restaurant
 
 
 
-				customer *b=head;
-				cout<<"head"<<endl;
-				for (int i=0; i < counterdau ; i++){
-					cout<<b->energy<<"     ";
-					b=b->next;
-				}
-				// for (int i=0;i<num;i++){
-				// 	logicRED(removeFirstQueue());
+				// customer *b=head;
+				// cout<<"head"<<endl;
+				// for (int i=0; i < counterdau ; i++){
+				// 	cout<<b->energy<<"     ";
+				// 	b=b->next;
 				// }
+				for (int i=0;i<num;i++){
+					logicRED(removeFirstQueue());
+				}
 
 
 			}
