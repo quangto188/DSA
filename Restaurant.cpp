@@ -4,25 +4,52 @@ class imp_res : public Restaurant
 {	public:
 		int counter;
 		int counterQueue;
+		int counterdau;
 		customer *first;
 		customer *X;
 		customer *firstQueue;
 		customer *lastQueue;
 		customer *firstHistory;
 		customer *lastHistory;
-		customer *tempfirstHistory;
-		customer *templastHistory;
+		customer *dau;
+
 	public:	
 		imp_res() {
 			counter=0;
 			counterQueue=0;
+			counterdau=0;
 		};
+		customer *copylist(customer *cus,int num){
+			customer *current = cus;
+			customer *copy = new customer (current->name,current->energy,current->next,NULL);
+			customer *const head = copy;
+			current=current->next;
+			for (int i=1; i < counter -num ; i ++){
+				copy= copy ->next =new customer(current->name, current->energy, NULL, NULL);
+				current=current->next;
+			}
+			// while (current !=NULL){
+			// 	copy = copy->next =new customer (current->name, current->energy, NULL, NULL);
+			// 	// copy = copy->next;
+			// 	current= current->next;
+			// }
+			return head;
+		}
+
+		customer *removeFirstQueue(){
+			customer *del = firstQueue;
+			firstQueue=firstQueue->next;
+			del ->next =nullptr;
+			counterQueue--;
+			return del;
+		}
+
+
 		void removeFirstHistory( ){
 			customer *del = firstHistory;
 			firstHistory = firstHistory->next;
 			del ->next =nullptr;
 			delete del;
-
 		}
 		customer *find_RES(customer *cus){
 			int RES = abs(first->energy - cus->energy);
@@ -60,6 +87,9 @@ class imp_res : public Restaurant
 			}
 			if (counter ==0){ 
 				first = cus;
+				customer* histemp = new customer(cus->name , cus->energy ,nullptr, nullptr );
+				firstHistory = histemp;
+				lastHistory = histemp;
 				counter++;
 			}else if (counter==1){
 				if (!checkname(cus)) return;
@@ -68,9 +98,15 @@ class imp_res : public Restaurant
 				cus->next= first;
 				cus->prev = first;
 				X= cus;
+				customer* histemp = new customer(cus->name , cus->energy ,nullptr, nullptr );
+				lastHistory->next= histemp;
+				lastHistory = histemp;
 				counter++;
 			}else if (counter < MAXSIZE/2){
 				if (!checkname(cus)) return;
+				customer* histemp = new customer(cus->name , cus->energy ,nullptr, nullptr );
+				lastHistory->next= histemp;
+				lastHistory = histemp;
 				if (cus->energy >= X->energy){
 					customer *N= X->next;
 					X->next=cus;
@@ -90,6 +126,9 @@ class imp_res : public Restaurant
 				}
 			}else if ( counter < MAXSIZE){
 				if (!checkname(cus)) return;
+				customer* histemp = new customer(cus->name , cus->energy ,nullptr, nullptr );
+				lastHistory->next= histemp;
+				lastHistory = histemp;
 				X= find_RES(cus); //tim X
 				int RES= cus->energy-X->energy;
 				if (RES >=0){
@@ -121,18 +160,6 @@ class imp_res : public Restaurant
 				lastQueue = cus;
 				counterQueue++;
 			}
-			
-			customer* histemp = new customer(cus->name , cus->energy ,nullptr, nullptr );
-			if (counter == 1){
-				firstHistory = histemp;
-				lastHistory = histemp;
-			}else{
-				lastHistory->next= histemp;
-				lastHistory = histemp;
-			}
-
-
-
 			return;
 		}
 		void RED(string name, int energy)
@@ -150,28 +177,36 @@ class imp_res : public Restaurant
 				first->next= nullptr;
 				first->prev=nullptr;
 			}else {
-			for (int i=0; i< num; i++){
-				removeFirstHistory();
-				//counter--;
-			}
-			}
-			counter=0;
-			counterQueue=0;
-			customer *a = firstHistory;
-			while (a-> next != NULL){
-				customer* histemp = new customer(a->name , a->energy ,nullptr, nullptr );
-				if (counter == 1){
-					tempfirstHistory = histemp;
-					templastHistory = histemp;
-				}else{
-					templastHistory->next= histemp;
-					templastHistory = histemp;
+				for (int i=0; i< num; i++){
+					removeFirstHistory();
+					//counter--;
 				}
 			}
-			for (int i=0; i < MAXSIZE; i++){
-				logicRED(tempfirstHistory);
-				tempfirstHistory=tempfirstHistory->next;
+			counterdau=MAXSIZE-num;
+			dau =copylist(firstHistory,num);
+			firstHistory=firstHistory->next;
+			cout<<" History"<<endl;
+			for(int i=0; i< counterdau-1;i++){
+				cout<<firstHistory->energy<< "     ";
+				firstHistory=firstHistory->next;
 			}
+			cout<<"head"<<endl;
+			for (int i=0; i < counterdau ; i++){
+				cout<<dau->energy<<"     ";
+				dau=dau->next;
+			}
+			cout<<endl;
+			
+			// counter=0;
+			// for (int i=0; i< counterdau;i++){
+			// 	logicRED(dau);
+			// 	dau=dau->next;
+			// }
+			// for (int i=0;i<num;i++){
+			// 	customer *que = removeFirstQueue();
+			// 	logicRED(que);
+			// }
+			
 		}
 		void PURPLE()
 		{
@@ -207,20 +242,30 @@ class imp_res : public Restaurant
 			cout << "--------------danh sach trong queue-------------" << endl;
 			customer *b = firstQueue;
 			int mx = 1;
-			while (mx <= 4)
+			while (mx <= counterQueue)
 			{
 				cout << b->name << " " << b->energy << endl;
 				b = b->next;
 				mx++;
 			}
+			cout << "--------------danh sach trong head-------------" << endl;
+			customer *f= dau;
+			int mw = 1;
+			while (mw <= counterdau)
+			{
+				cout << f->name << " " << f->energy << endl;
+				f = f->next;
+				mw++;
+			}
 			cout << "--------------danh sach trong history-------------" << endl;
 			customer *c = firstHistory;
 			int m = 1;
-			while (m <= 8)
+			while (m <= 4)
 			{
 				cout << c->name << " " << c->energy << endl;
 				c = c->next;
 				m++;
 			}
+			
 		}
 };
