@@ -45,7 +45,7 @@ class imp_res : public Restaurant
 		}
 
 
-		void removeFirstHistory( ){
+		void removeFirstHistory(){
 			customer *del = firstHistory;
 			firstHistory = firstHistory->next;
 			del ->next =nullptr;
@@ -173,30 +173,68 @@ class imp_res : public Restaurant
 		{
 			cout << "blue "<< num << endl;
 			if (num >= counter) {
-				first=NULL;
-				first->next= nullptr;
-				first->prev=nullptr;
+				counter=0;
+				first->next=NULL;
+				first->prev=NULL;
+				for(int i=0; i < counterQueue; i){
+					logicRED(removeFirstQueue());
+					//cout<<counterQueue<<endl;
+				}
 			}else {
 				for (int i=0; i< num; i++){
 					removeFirstHistory();
-					//counter--;
 				}
+				//cout<<" COUNTER: >>>>>>>>>>>>>>>>>>>>>>>>>>>   "<<counter<<endl;
+				counterdau=counter-num;
+				dau =copylist(firstHistory,num);
+				counter=0;
+				first->next=NULL;
+				first->prev=NULL;				
+				customer *const head=dau;
+				customer *a=head;
+				cout<<"head"<<endl;
+				for (int i=0; i < counterdau ; i++){
+					cout<<a->energy<<"     ";
+					a=a->next;
+				}
+				cout<<endl;
+
+
+
+
+				for (int i=0; i< counterdau;i++){
+					logicRED(dau);
+					dau=dau->next;
+				}
+
+
+
+				customer *b=head;
+				cout<<"head"<<endl;
+				for (int i=0; i < counterdau ; i++){
+					cout<<b->energy<<"     ";
+					b=b->next;
+				}
+				// for (int i=0;i<num;i++){
+				// 	logicRED(removeFirstQueue());
+				// }
+
+
 			}
-			counterdau=MAXSIZE-num;
-			dau =copylist(firstHistory,num);
-			firstHistory=firstHistory->next;
-			cout<<" History"<<endl;
-			for(int i=0; i< counterdau-1;i++){
-				cout<<firstHistory->energy<< "     ";
-				firstHistory=firstHistory->next;
-			}
-			cout<<"head"<<endl;
-			for (int i=0; i < counterdau ; i++){
-				cout<<dau->energy<<"     ";
-				dau=dau->next;
-			}
-			cout<<endl;
-			
+			// counterdau=counter-num;
+			// dau =copylist(firstHistory,num);
+			// cout<<"head"<<endl;
+			// for (int i=0; i < counterdau ; i++){
+			// 	cout<<dau->energy<<"     ";
+			// 	dau=dau->next;
+			// }
+
+			// cout<<endl;
+			// cout<<" History"<<endl;
+			// for(int i=0; i< counterdau;i++){
+			// 	cout<<firstHistory->energy<< "     ";
+			// 	firstHistory=firstHistory->next;
+			// }
 			// counter=0;
 			// for (int i=0; i< counterdau;i++){
 			// 	logicRED(dau);
@@ -248,24 +286,24 @@ class imp_res : public Restaurant
 				b = b->next;
 				mx++;
 			}
-			cout << "--------------danh sach trong head-------------" << endl;
-			customer *f= dau;
-			int mw = 1;
-			while (mw <= counterdau)
-			{
-				cout << f->name << " " << f->energy << endl;
-				f = f->next;
-				mw++;
-			}
-			cout << "--------------danh sach trong history-------------" << endl;
-			customer *c = firstHistory;
-			int m = 1;
-			while (m <= 4)
-			{
-				cout << c->name << " " << c->energy << endl;
-				c = c->next;
-				m++;
-			}
+			// cout << "--------------danh sach trong head-------------" << endl;
+			// customer *f= dau;
+			// int mw = 1;
+			// while (mw <= counterdau)
+			// {
+			// 	cout << f->name << " " << f->energy << endl;
+			// 	f = f->next;
+			// 	mw++;
+			// }
+			// cout << "--------------danh sach trong history-------------" << endl;
+			// customer *c = firstHistory;
+			// int m = 1;
+			// while (m <= 4)
+			// {
+			// 	cout << c->name << " " << c->energy << endl;
+			// 	c = c->next;
+			// 	m++;
+			// }
 			
 		}
 };
