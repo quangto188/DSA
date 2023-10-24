@@ -209,11 +209,11 @@ class imp_res : public Restaurant
 				}
 			}
 		}
-				customer *a = first;
-				for (int i=0; i< counter; i++){
-					a->print();
-					a=a->next;
-				}
+				// customer *a = first;
+				// for (int i=0; i< counter; i++){
+				// 	a->print();
+				// 	a=a->next;
+				// }
 		}
 		void PURPLE()
 		{
@@ -233,46 +233,25 @@ class imp_res : public Restaurant
 		}
 		void LIGHT(int num)
 		{
-			//cout << "light " << num << endl;
+			if (num >0 ){
+				customer *a = X;
+				for (int i=0; i< counter ; i++){
+					a->print();
+					a=a->next;
+				}
+			}else if (num <0){
+				customer *a = X;
+				for (int i=0; i< counter; i++){
+					a->print();
+					a=a->prev;
+				}
+			}else {
+				customer *a=firstQueue;
+				for (int i=0; i< counterQueue ; i++){
+					a->print();
+					a=a->next;
+				}
+			}
 		}
-		// void SHOW()
-		// {
-		// 	cout << "--------------danh sach trong ban--------------" << endl;
-		// 	customer *a = first;
-		// 	int max = 1;
-		// 	while (max <= counter)
-		// 	{
-		// 		cout << a->name << " " << a->energy << endl;
-		// 		a = a->next;
-		// 		max++;
-		// 	}
-		// 	cout << "--------------danh sach trong queue-------------" << endl;
-		// 	customer *b = firstQueue;
-		// 	int mx = 1;
-		// 	while (mx <= counterQueue)
-		// 	{
-		// 		cout << b->name << " " << b->energy << endl;
-		// 		b = b->next;
-		// 		mx++;
-		// 	}
-		// 	// cout << "--------------danh sach trong head-------------" << endl;
-		// 	// customer *f= dau;
-		// 	// int mw = 1;
-		// 	// while (mw <= counterdau)
-		// 	// {
-		// 	// 	cout << f->name << " " << f->energy << endl;
-		// 	// 	f = f->next;
-		// 	// 	mw++;
-		// 	// }
-		// 	// cout << "--------------danh sach trong history-------------" << endl;
-		// 	// customer *c = firstHistory;
-		// 	// int m = 1;
-		// 	// while (m <= 4)
-		// 	// {
-		// 	// 	cout << c->name << " " << c->energy << endl;
-		// 	// 	c = c->next;
-		// 	// 	m++;
-		// 	// }
-			
-		// }
+		
 };
