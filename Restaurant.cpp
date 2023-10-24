@@ -18,6 +18,7 @@ class imp_res : public Restaurant
 			counter=0;
 			counterQueue=0;
 			counterdau=0;
+			
 		};
 		customer *copylist(customer *cus,int num){
 			customer *current = cus;
@@ -28,11 +29,6 @@ class imp_res : public Restaurant
 				copy= copy ->next =new customer(current->name, current->energy, NULL, NULL);
 				current=current->next;
 			}
-			// while (current !=NULL){
-			// 	copy = copy->next =new customer (current->name, current->energy, NULL, NULL);
-			// 	// copy = copy->next;
-			// 	current= current->next;
-			// }
 			return head;
 		}
 
@@ -165,146 +161,118 @@ class imp_res : public Restaurant
 		}
 		void RED(string name, int energy)
 		{
-			cout << name << " " << energy << endl;
+			//cout << name << " " << energy << endl;
 			customer *cus = new customer (name, energy, nullptr, nullptr);
 			logicRED(cus);
 			
 		}
 		void BLUE(int num)
-		{
-			cout << "blue "<< num << endl;
+		{	if (counter>0){
 			if (num >= counter) {
 				counter=0;
 				first->next=NULL;
 				first->prev=NULL;
 				for(int i=0; i < counterQueue; i){
 					logicRED(removeFirstQueue());
-					//cout<<counterQueue<<endl;
 				}
-			}else {
+			}else if (num< counter && counterQueue>0) {
 				for (int i=0; i< num; i++){
 					removeFirstHistory();
 				}
-				//cout<<" COUNTER: >>>>>>>>>>>>>>>>>>>>>>>>>>>   "<<counter<<endl;
 				counterdau=counter-num;
 				dau =copylist(firstHistory,num);
 				counter=0;
 				first->next=NULL;
 				first->prev=NULL;				
-				// customer *const head=dau;
-				// customer *a=head;
-				// cout<<"head"<<endl;
-				// for (int i=0; i < counterdau ; i++){
-				// 	cout<<a->energy<<"     ";
-				// 	a=a->next;
-				// }
-				// cout<<endl;
-
-
-
-
+			
 				for (int i=0; i< counterdau;i++){
 					logicRED(dau);
 					dau=dau->next;
 				}
-
-
-
-				// customer *b=head;
-				// cout<<"head"<<endl;
-				// for (int i=0; i < counterdau ; i++){
-				// 	cout<<b->energy<<"     ";
-				// 	b=b->next;
-				// }
-				for (int i=0;i<num;i++){
+				int j= min(num,counterQueue);
+				for (int i=0;i<j;i++){
 					logicRED(removeFirstQueue());
 				}
-
-
-			}
-			// counterdau=counter-num;
-			// dau =copylist(firstHistory,num);
-			// cout<<"head"<<endl;
-			// for (int i=0; i < counterdau ; i++){
-			// 	cout<<dau->energy<<"     ";
-			// 	dau=dau->next;
-			// }
-
-			// cout<<endl;
-			// cout<<" History"<<endl;
-			// for(int i=0; i< counterdau;i++){
-			// 	cout<<firstHistory->energy<< "     ";
-			// 	firstHistory=firstHistory->next;
-			// }
-			// counter=0;
-			// for (int i=0; i< counterdau;i++){
-			// 	logicRED(dau);
-			// 	dau=dau->next;
-			// }
-			// for (int i=0;i<num;i++){
-			// 	customer *que = removeFirstQueue();
-			// 	logicRED(que);
-			// }
+			}else {
+				for (int i=0; i< num; i++){
+					removeFirstHistory();
+				}
+				counterdau=counter-num;
+				dau =copylist(firstHistory,num);
+				counter=0;
+				first->next=NULL;
+				first->prev=NULL;				
 			
+				for (int i=0; i< counterdau;i++){
+					logicRED(dau);
+					dau=dau->next;
+				}
+			}
+		}
+				customer *a = first;
+				for (int i=0; i< counter; i++){
+					a->print();
+					a=a->next;
+				}
 		}
 		void PURPLE()
 		{
-			cout << "purple"<< endl;
+			//cout << "purple"<< endl;
 		}
 		void REVERSAL()
 		{
-			cout << "reversal" << endl;
+			//cout << "reversal" << endl;
 		}
 		void UNLIMITED_VOID()
 		{
-			cout << "unlimited_void" << endl;
+			//cout << "unlimited_void" << endl;
 		}
 		void DOMAIN_EXPANSION()
 		{
-			cout << "domain_expansion" << endl;
+			//cout << "domain_expansion" << endl;
 		}
 		void LIGHT(int num)
 		{
-			cout << "light " << num << endl;
+			//cout << "light " << num << endl;
 		}
-		void SHOW()
-		{
-			cout << "--------------danh sach trong ban--------------" << endl;
-			customer *a = first;
-			int max = 1;
-			while (max <= counter)
-			{
-				cout << a->name << " " << a->energy << endl;
-				a = a->next;
-				max++;
-			}
-			cout << "--------------danh sach trong queue-------------" << endl;
-			customer *b = firstQueue;
-			int mx = 1;
-			while (mx <= counterQueue)
-			{
-				cout << b->name << " " << b->energy << endl;
-				b = b->next;
-				mx++;
-			}
-			// cout << "--------------danh sach trong head-------------" << endl;
-			// customer *f= dau;
-			// int mw = 1;
-			// while (mw <= counterdau)
-			// {
-			// 	cout << f->name << " " << f->energy << endl;
-			// 	f = f->next;
-			// 	mw++;
-			// }
-			// cout << "--------------danh sach trong history-------------" << endl;
-			// customer *c = firstHistory;
-			// int m = 1;
-			// while (m <= 4)
-			// {
-			// 	cout << c->name << " " << c->energy << endl;
-			// 	c = c->next;
-			// 	m++;
-			// }
+		// void SHOW()
+		// {
+		// 	cout << "--------------danh sach trong ban--------------" << endl;
+		// 	customer *a = first;
+		// 	int max = 1;
+		// 	while (max <= counter)
+		// 	{
+		// 		cout << a->name << " " << a->energy << endl;
+		// 		a = a->next;
+		// 		max++;
+		// 	}
+		// 	cout << "--------------danh sach trong queue-------------" << endl;
+		// 	customer *b = firstQueue;
+		// 	int mx = 1;
+		// 	while (mx <= counterQueue)
+		// 	{
+		// 		cout << b->name << " " << b->energy << endl;
+		// 		b = b->next;
+		// 		mx++;
+		// 	}
+		// 	// cout << "--------------danh sach trong head-------------" << endl;
+		// 	// customer *f= dau;
+		// 	// int mw = 1;
+		// 	// while (mw <= counterdau)
+		// 	// {
+		// 	// 	cout << f->name << " " << f->energy << endl;
+		// 	// 	f = f->next;
+		// 	// 	mw++;
+		// 	// }
+		// 	// cout << "--------------danh sach trong history-------------" << endl;
+		// 	// customer *c = firstHistory;
+		// 	// int m = 1;
+		// 	// while (m <= 4)
+		// 	// {
+		// 	// 	cout << c->name << " " << c->energy << endl;
+		// 	// 	c = c->next;
+		// 	// 	m++;
+		// 	// }
 			
-		}
+		// }
 };

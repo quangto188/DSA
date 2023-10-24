@@ -1,4 +1,3 @@
-#include "main.h"
 #include "Restaurant.cpp"
 #include <fstream>
 
@@ -39,10 +38,8 @@ void simulate(string filename, imp_res* r)
     	else if(str == "DOMAIN_EXPANSION") // DOMAIN_EXPANSION
     	{
     			r->DOMAIN_EXPANSION();
-    	}else if (str == "SHOW") // DOMAIN_EXPANSION
-		{
-			r->SHOW();
-		}else // LIGHT <NUM>
+    	}
+    	else // LIGHT <NUM>
     	{
                 ss >> num;
     			r->LIGHT(stoi(num));
