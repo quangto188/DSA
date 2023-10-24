@@ -5,7 +5,9 @@ class imp_res : public Restaurant
 		int counter;
 		int counterQueue;
 		int counterdau;
+		int counterDOMAND;
 		customer *first;
+		customer *firstDM;
 		customer *X;
 		customer *firstQueue;
 		customer *lastQueue;
@@ -18,7 +20,7 @@ class imp_res : public Restaurant
 			counter=0;
 			counterQueue=0;
 			counterdau=0;
-			
+			counterDOMAND=0;
 		};
 		customer *copylist(customer *cus,int num){
 			customer *current = cus;
@@ -227,15 +229,230 @@ class imp_res : public Restaurant
 		{
 			//cout << "unlimited_void" << endl;
 		}
-		void DOMAIN_EXPANSION()
-		{
-			//cout << "domain_expansion" << endl;
+		void deletenodeQueueam(){
+			customer *p=firstQueue;
+			if (p->energy <0) {
+				firstQueue=firstQueue->next;
+				free(p);
+				return;
+			}
+			while (p->next!=NULL){
+				if (p->next->energy <0){
+					customer *temp = p->next;
+					p->next =p->next->next;
+					free(temp);
+				}else p=p->next;
+			}
+		}
+		void deletenodeQueueduong(){
+			customer *p=firstQueue;
+			if (p->energy >0) {
+				firstQueue=firstQueue->next;
+				free(p);
+				return;
+			}
+			while (p->next!=NULL){
+				if (p->next->energy >0){
+					customer *temp = p->next;
+					p->next =p->next->next;
+					free(temp);
+				}else p=p->next;
+			}
+		}
+
+		void deletenodeHistoryam(){
+			customer *p=firstHistory;
+			if (p->energy <0) {
+				firstHistory->print();
+				firstHistory=firstHistory->next;
+				free(p);
+				return;
+			}
+			while (p->next!=NULL){
+				if (p->next->energy <0){
+					customer *temp = p->next;
+					temp->print();
+					p->next =p->next->next;
+					free(temp);
+				}else p=p->next;
+			}
+		}
+		void deletenodeHistoryduong(){
+			customer *p=firstHistory;
+			if (p->energy >0) {
+				firstHistory->print();
+				firstHistory=firstHistory->next;
+				free(p);
+				return;
+			}
+			while (p->next!=NULL){
+				if (p->next->energy >0){
+					customer *temp = p->next;
+					temp->print();
+					p->next =p->next->next;
+					free(temp);
+				}else p=p->next;
+			}
+		}
+
+		void deletenodeFirst(customer *del){
+			if (first == del) {
+				customer *a=first->prev;
+				first= first->next;
+				first->prev=a;
+				a->next =first;
+			}else if (del->next == first) {
+				customer *a = first->prev->prev;
+				first->prev=a;
+				a->next=first;
+			}else {
+				customer *a=del->next;
+				customer *b=del->prev;
+				a->prev=b;
+				b->next=a;
+			}
+			counter--;
+			free(del);
+			return;
+		}
+		// void DOMAIN_EXPANSION()
+		// {
+		// 	int tongam=0;
+		// 	int tongduong=0;
+		// 	customer *a=first;
+		// 	for (int i=0; i < counter; i++){
+		// 		if (a ->energy <0 ) tongam +=a->energy;
+		// 		else tongduong+=a->energy;
+		// 		a=a->next;
+		// 	}
+		// 	customer *aqueue= firstQueue;
+		// 	for (int i=0; i< counterQueue; i++){
+		// 		if (aqueue ->energy <0) tongam+=aqueue->energy;
+		// 		else tongduong+=aqueue->energy;
+		// 		aqueue=aqueue->next;
+		// 	}
+		// 	if (tongduong > abs(tongam)){
+		// 		customer *del=first;
+		// 		int x=counter;
+		// 		for (int i=0; i< x;i++){
+		// 			if (del->energy < 0) del=del->next;
+		// 			else {
+		// 				customer *a=del;
+		// 				del=del->next;
+		// 				deletenodeFirst(a);
+		// 			}
+		// 		}
+		// 		deletenodeHistoryam();
+		// 		if (counterQueue>0) deletenodeQueueam();
+		// 	}else {
+		// 		customer *del=first;
+		// 		int x=counter;
+		// 		for (int i=0; i< x;i++){
+		// 			if (del->energy >0) del=del->next;
+		// 			else {
+		// 				customer *a=del;
+		// 				del=del->next;
+		// 				deletenodeFirst(a);
+		// 			}
+		// 		}
+		// 		deletenodeHistoryduong();
+		// 		if (counterQueue<0) deletenodeQueueduong();
+		// 	}
+		// }
+		customer * returnduong(){
+			customer *a=first;
+			if (a->energy >0 ) return a;
+		}
+		bool checkdomain(){
+			int tongam=0;
+			int tongduong=0;
+			customer *a=first;
+			for (int i=0; i < counter; i++){
+				if (a ->energy <0 ) tongam +=a->energy;
+				else tongduong+=a->energy;
+				a=a->next;
+			}
+			if (counterQueue>0){
+				customer *aqueue= firstQueue;
+				for (int i=0; i< counterQueue; i++){
+					if (aqueue ->energy <0) tongam+=aqueue->energy;
+					else tongduong+=aqueue->energy;
+					aqueue=aqueue->next;
+				}
+			}
+			if (abs(tongam) > tongduong) return 0;
+			else return 1;
+		}
+		void DOMAIN_EXPANSION(){
+			customer* a = first;
+			int x= counter;
+			if(checkdomain() == 1) {
+				// lay duong
+				for(int i =0 ; i< x ;i++)
+				{
+					if(a->energy > 0) {
+						customer* cus = new customer(a->name , a->energy , nullptr  , nullptr);
+						if (counterDOMAND ==0){ 
+							firstDM = cus;
+							counterDOMAND++;
+						}else if (counterDOMAND==1){
+							firstDM->next=cus;
+							firstDM->prev =cus;
+							cus->next= firstDM;
+							cus->prev = firstDM;
+							X= cus;
+							counterDOMAND++;
+						}else {
+							customer *N= X->next;
+							X->next=cus;
+							cus->prev=X;
+							cus->next=N;
+							N->prev=cus;
+							X=X->next;
+							counterDOMAND++;
+						}
+					}
+					a = a->next;
+				}
+			}
+			else {
+				// lay am
+				
+				for(int i =0 ; i< x ;i++)
+				{
+					if(a->energy < 0) {
+						customer* cus = new customer(a->name , a->energy , nullptr  , nullptr);
+						if (counterDOMAND ==0){ 
+							firstDM = cus;
+							counterDOMAND++;
+						}else if (counterDOMAND==1){
+							firstDM->next=cus;
+							firstDM->prev =cus;
+							cus->next= firstDM;
+							cus->prev = firstDM;
+							X= cus;
+							counterDOMAND++;
+						}else {
+							customer *N= X->next;
+							X->next=cus;
+							cus->prev=X;
+							cus->next=N;
+							N->prev=cus;
+							X=X->next;
+							counterDOMAND++;
+						}
+					}
+					a = a->next;
+				}
+			}
+		first=a;
+		counter=counterDOMAND;
 		}
 		void LIGHT(int num)
 		{
 			if (num >0 ){
 				customer *a = X;
-				for (int i=0; i< counter ; i++){
+				for (int i=0; i< counter; i++){
 					a->print();
 					a=a->next;
 				}
