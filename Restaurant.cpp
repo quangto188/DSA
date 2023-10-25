@@ -230,36 +230,59 @@ class imp_res : public Restaurant
 			//cout << "unlimited_void" << endl;
 		}
 		void deletenodeQueueam(){
-			customer *p=firstQueue;
-			if (p->energy <0) {
-				firstQueue=firstQueue->next;
-				free(p);
+				while (firstQueue->energy<0 && firstQueue->next !=NULL){
+					firstQueue->print();
+					firstQueue= firstQueue->next;
+					counterQueue--;
+				}
+			if (counterQueue ==1){
+				if (firstQueue->energy <0) firstQueue->print();
 				return;
 			}
+			customer *p=firstQueue->next;
 			while (p->next!=NULL){
-				if (p->next->energy <0){
-					customer *temp = p->next;
-					p->next =p->next->next;
-					free(temp);
+				if (p->energy<0){
+					p->print();
+					customer *temp=p;
+					p=p->next;
+					counterQueue--;
+					delete(temp);
 				}else p=p->next;
 			}
+			if (p->next==NULL & p->energy <0){
+				p->print();
+				counterQueue--;
+				delete(p);
+			}
+			
 		}
 		void deletenodeQueueduong(){
-			customer *p=firstQueue;
-			if (p->energy >0) {
-				firstQueue=firstQueue->next;
-				free(p);
+			while (firstQueue->energy>0 && firstQueue->next !=NULL){
+					firstQueue->print();
+					firstQueue= firstQueue->next;
+					counterQueue--;
+				}
+			if (counterQueue ==1){
+				if (firstQueue->energy >0) firstQueue->print();
 				return;
 			}
+			customer *p=firstQueue->next;
 			while (p->next!=NULL){
-				if (p->next->energy >0){
-					customer *temp = p->next;
-					p->next =p->next->next;
-					free(temp);
+				if (p->energy>0){
+					p->print();
+					customer *temp=p;
+					p=p->next;
+					counterQueue--;
+					delete(temp);
 				}else p=p->next;
 			}
+			if (p->next==NULL & p->energy >0){
+				p->print();
+				counterQueue--;
+				delete(p);
+			}
+			
 		}
-
 		void deletenodeHistoryam(){
 			customer *p=firstHistory;
 			if (p->energy <0) {
@@ -293,76 +316,10 @@ class imp_res : public Restaurant
 					free(temp);
 				}else p=p->next;
 			}
+			
 		}
 
-		void deletenodeFirst(customer *del){
-			if (first == del) {
-				customer *a=first->prev;
-				first= first->next;
-				first->prev=a;
-				a->next =first;
-			}else if (del->next == first) {
-				customer *a = first->prev->prev;
-				first->prev=a;
-				a->next=first;
-			}else {
-				customer *a=del->next;
-				customer *b=del->prev;
-				a->prev=b;
-				b->next=a;
-			}
-			counter--;
-			free(del);
-			return;
-		}
-		// void DOMAIN_EXPANSION()
-		// {
-		// 	int tongam=0;
-		// 	int tongduong=0;
-		// 	customer *a=first;
-		// 	for (int i=0; i < counter; i++){
-		// 		if (a ->energy <0 ) tongam +=a->energy;
-		// 		else tongduong+=a->energy;
-		// 		a=a->next;
-		// 	}
-		// 	customer *aqueue= firstQueue;
-		// 	for (int i=0; i< counterQueue; i++){
-		// 		if (aqueue ->energy <0) tongam+=aqueue->energy;
-		// 		else tongduong+=aqueue->energy;
-		// 		aqueue=aqueue->next;
-		// 	}
-		// 	if (tongduong > abs(tongam)){
-		// 		customer *del=first;
-		// 		int x=counter;
-		// 		for (int i=0; i< x;i++){
-		// 			if (del->energy < 0) del=del->next;
-		// 			else {
-		// 				customer *a=del;
-		// 				del=del->next;
-		// 				deletenodeFirst(a);
-		// 			}
-		// 		}
-		// 		deletenodeHistoryam();
-		// 		if (counterQueue>0) deletenodeQueueam();
-		// 	}else {
-		// 		customer *del=first;
-		// 		int x=counter;
-		// 		for (int i=0; i< x;i++){
-		// 			if (del->energy >0) del=del->next;
-		// 			else {
-		// 				customer *a=del;
-		// 				del=del->next;
-		// 				deletenodeFirst(a);
-		// 			}
-		// 		}
-		// 		deletenodeHistoryduong();
-		// 		if (counterQueue<0) deletenodeQueueduong();
-		// 	}
-		// }
-		customer * returnduong(){
-			customer *a=first;
-			if (a->energy >0 ) return a;
-		}
+
 		bool checkdomain(){
 			int tongam=0;
 			int tongduong=0;
@@ -414,6 +371,8 @@ class imp_res : public Restaurant
 					}
 					a = a->next;
 				}
+				deletenodeHistoryam();
+				if (counterQueue>0) deletenodeQueueam();
 			}
 			else {
 				// lay am
@@ -444,10 +403,18 @@ class imp_res : public Restaurant
 					}
 					a = a->next;
 				}
+				deletenodeHistoryduong();
+				if (counterQueue>0) deletenodeQueueduong();
 			}
-		first=a;
+		first=firstDM;
 		counter=counterDOMAND;
-		}
+		if (counterQueue >0 && counter <MAXSIZE){
+			int x=min(MAXSIZE-counter, counterQueue);
+			for(int i=0; i<x; i++){
+				logicRED(removeFirstQueue());
+			}
+		}		
+	}
 		void LIGHT(int num)
 		{
 			if (num >0 ){
